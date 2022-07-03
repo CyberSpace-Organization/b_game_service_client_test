@@ -1,0 +1,58 @@
+//@author by. created in 2022/6/30
+syntax = "proto3";
+
+package protobuf;
+
+option java_outer_classname = "Room";
+option java_multiple_files = true;
+option go_package = ".;room";
+
+import "google/protobuf/any.proto";
+
+service room{
+  //创建房间请求，仅用于举例
+  rpc createRoom(CreateRoomRequest) returns(CreateRoomResponse);
+  //与房间连接，保持流式连接
+  rpc connectToTheRoom(stream ConnectRequest)returns(stream ConnectResponse);
+}
+message PlayerInfo{
+  string userNo = 1;
+  string name = 2;
+  string userLevel = 3;
+  int32 xPosition = 4;
+  int32 yPosition = 5;
+  int32 zPosition = 6;
+}
+message RoomInfo{
+  string roomId = 1;
+  string roomName = 2;
+  int32 roomLength = 3;
+  int32 roomWidth = 4;
+  int32 roomHeight = 5;
+}
+message CreateRoomRequest{
+  string roomName = 2;
+  int32 roomLength = 3;
+  int32 roomWidth = 4;
+  int32 roomHeight = 5;
+  bool needPass = 6;
+  string password = 7;
+}
+message CreateRoomResponse{
+  bool isSuccess = 1;
+  string roomCode = 2;
+}
+message ConnectRequest{
+  string token = 1;
+  string roomCode = 2;
+  bool isFirstConnect = 3;
+  bool isToTerminate = 4;
+  PlayerInfo playerInfo = 5;
+}
+message ConnectResponse{
+  string isSuccess = 1;
+  string message = 2;
+  RoomInfo roomInfo = 3;
+  repeated PlayerInfo players = 4;
+}
+
